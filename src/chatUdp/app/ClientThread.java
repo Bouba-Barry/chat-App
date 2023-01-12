@@ -18,7 +18,6 @@ public class ClientThread extends  Thread {
 
     private DatagramPacket packet;
     private DatagramSocket serverSocket;
-    protected static int num = 3224;
     private boolean isFirstQueryOk;
     private String nom;
     protected static List<User> loggedClient= new ArrayList<User>();
@@ -26,28 +25,26 @@ public class ClientThread extends  Thread {
         this.packet = packet;
         this.serverSocket = serverSocket;
         this.isFirstQueryOk = false;
-        num ++;
     }
-
 
     @Override
     public void run() {
+        // la fonction init gére le login ou l'enregistrement du user
         init();
-        System.out.println("les personnes connecté :");
 
-            for (User u : loggedClient)
-                System.out.println("user => "+u.getUsername());
-
-            handleChat();
+        // gerez le chat entre les amis du user
+        handleChat();
         try {
+            // gerez si réçoit une réquete d'invitation du user
             handleInvitation();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (UnknownHostException e) {
             throw new RuntimeException(e);
         }
-        handleInvitationNotSended();
 
+        // si le user connecté demande les invitations qu'il a manqué
+        handleInvitationNotSended();
     }
 
     public void init(){
@@ -55,53 +52,45 @@ public class ClientThread extends  Thread {
         System.out.println("message: "+message);
         String response = "";
         if (message.startsWith("LOGIN:")) {
-            // This is a login request
+            // lors du login, ses infos son envoyé, il faut le split pour recupérer le nom et password
             String[] parts = message.split(":");
             String username = parts[1];
             String password = parts[2];
 
-            // Check if the provided username and password match with existing account
+            // vérifier si le username et password existe
             boolean loginSuccess = false;
-            String tmpNum = null;
+
             for (int i = 0; i < ChatServer.ACCOUNTS.size(); i++) {
                 User user = ChatServer.ACCOUNTS.get(i);
                 if (user.getUsername().equalsIgnoreCase(username) && user.getPassword().equals(password)) {
                     loginSuccess = true;
-                    tmpNum = user.getNumero();
                     user.setAdresse(packet.getAddress().toString());
                     user.setPort(packet.getPort());
                     user.setIsOnline(true);
+                    // enregistrez le user sur la liste de ceux connecté
                    loggedClient.add(user);
+                    broadcastAllFriend(serverSocket," a join le chat ", username);
                     break;
                 }
             }
 
-            // Send a response to the client
-            String tmpName;
-            if(loginSuccess){
+            // envoyé un retour au client
+            if(loginSuccess)
                 response = "LOGIN_SUCESS";
-               // Client client = new Client(packet.getAddress(), packet.getPort(), this.name, tmpNum);
-               //loggedClient.add(currentClient);
-               // System.out.println(username);
-                tmpName = username;
-                //System.out.println("blabla "+tmpName);
-                this.nom = tmpName;
-               // System.out.println("blablabal "+this.nom);
-                //loggedClient.add(currentClient);
-            }
-            else{
+            else
                 response = "LOGIN_FAILLED";
-            }
+
             isFirstQueryOk = loginSuccess;
+
             sendMessage(serverSocket,response,username,packet.getPort());
         }
         else if (message.startsWith("REGISTER:")) {
-            // This is a registration request
+
             String[] parts = message.split(":");
             String username = parts[1];
             String password = parts[2];
 
-            // Check if the desired username is already taken
+            // vérifier si le username n'est pas déjà pris
             boolean usernameTaken = false;
             for (int i = 0; i < ChatServer.ACCOUNTS.size(); i++) {
                 User user = ChatServer.ACCOUNTS.get(i);
@@ -111,19 +100,17 @@ public class ClientThread extends  Thread {
                 }
             }
 
-            // Send a response to the client
+            // envoyé une réponse au client
             if (usernameTaken) {
                 response = "REGISTER_FAILED";
             } else {
-                // Add the new account to the database
+                // Ajouter le compte en db;
                 User client = new User();
                 client.setUsername(username);
                 client.setPassword(password);
-                client.setNumero(String.valueOf(num));
-                //ChatServer.ACCOUNTS.add(client);
 
                 response = "REGISTER_SUCCESS";
-                // connecter le client direct en l'ajoutant sur la liste
+                // connecter le client direct en l'ajoutant sur la liste loggedClient
                 client.setPort(packet.getPort());
                 client.setAdresse(packet.getAddress().toString());
                 client.setIsOnline(true);
@@ -136,7 +123,6 @@ public class ClientThread extends  Thread {
             isFirstQueryOk = usernameTaken;
             sendMessage(serverSocket,response,username,packet.getPort());
         }
-        //broadcastAllFriend(serverSocket,username+" has now been logged ");
     }
 
     private static void sendMessage(DatagramSocket socket,String message,String receiver, int port) {
@@ -155,17 +141,12 @@ public class ClientThread extends  Thread {
         }
     }
     private  void broadcastAllFriend(DatagramSocket socket,String message, String sender){
-        System.out.println("dans le brodcast on a le sender: "+sender);
+      //  System.out.println("dans le brodcast on a le sender: "+sender);
         User user = UserDao.getByName(sender);
         List<User> friends = user.getFriends();
-        for(User u: friends)
-            System.out.println("name_friend = "+u.getUsername());
         message = "brodcast,"+sender+":"+message;
         byte[] buffer = message.getBytes();
         for(User cl : loggedClient){
-
-                //System.out.println(cl.getIsOnline());
-                //System.out.println(cl.getAdresse());
             for(User u: friends){
                 if(cl.getUsername().equals(u.getUsername()))
                     try{
@@ -180,21 +161,31 @@ public class ClientThread extends  Thread {
     }
     public void handleChat(){
         String message = new String(packet.getData(), 0, packet.getLength());
-        System.out.println("message réçu = "+message);
-        //while(message != null && !message.equals("EXIT")){
+        System.out.println("message réçu du chat = "+message);
 
         if(message.startsWith("CHAT:")){
             String[] parts = message.split(":");
             String content = parts[2];
             String username = parts[1];
-            // si y'a aucune personne connecté ...
                 broadcastAllFriend(serverSocket,content, username);
         }
-      //  }
+        if(message.startsWith("EXIT:")){
+            String[] parts = message.split(":");
+            String username = parts[1];
+            broadcastAllFriend(serverSocket," a quitté le chat ! ", username);
+        }
+
     }
 
+    /**
+     * gerez si un user envoi une réquete d'invitation ...
+     * @throws SQLException
+     * @throws UnknownHostException
+     */
     public void handleInvitation() throws SQLException, UnknownHostException {
         String message = new String(packet.getData(), 0, packet.getLength());
+
+        // vérifier si le méssage réçu par le server commence par INVITE, alors il s'agit d'une réquête d'invitation
         if(message.startsWith("INVITE:")){
         System.out.println("new demand de "+message);
 
@@ -205,10 +196,8 @@ public class ClientThread extends  Thread {
             for(int i = 1; i<parts.length; i++){
                     System.out.println(parts[i]);
                     User user_receiver = UserDao.getByName(parts[i]);
-                System.out.println("nameInvitere = "+user_receiver.getUsername());
-                System.out.println("son id: "+user_receiver.getId());
+                //System.out.println("son id: "+user_receiver.getId());
                     InvitationDao.addInvite(new Invitation(user_sender.getId(), user_receiver.getId(), "attente"));
-                    System.out.println("invitation enregistré !! ");
                     String inv = "INVITATION:"+user_sender.getUsername();
                     if(user_receiver.getIsOnline()){
                         sendMessage(serverSocket,inv,user_receiver.getUsername(), user_receiver.getPort());
@@ -216,33 +205,39 @@ public class ClientThread extends  Thread {
                 }
             }
         }
+
+    /**
+     * gérez la réquête lié au invitation non réçu par le user
+     */
     public void handleInvitationNotSended()  {
         String message = new String(packet.getData(), 0, packet.getLength());
         if(message.startsWith("REQUEST_INVITATION:")){
-        System.out.println("Invitation = "+message);
+            //System.out.println("Invitation = "+message);
         List<Invitation> invitationList;
             String parts [] = message.split(":");
                 User user = UserDao.getByName(parts[1]);
-            System.out.println("userRequestInvite: " +user.getId());
+
             invitationList = InvitationDao.getAllInvitesNotSended(user.getId());
 
            String resultat =  convertInvitationsToString(invitationList);
-            System.out.println("tous mes invite en string " +resultat);
-            //convertListToString(invitationList);
-            System.out.println("le User "+user.getUsername());
-                sendMessage(serverSocket,"DEMAND,"+resultat,user.getUsername(), user.getPort());
+            //System.out.println("tous mes invite en string " +resultat);
 
-            System.out.println("invitation manqué envoyé au user ");
+            sendMessage(serverSocket,"DEMAND,"+resultat,user.getUsername(), user.getPort());
         }
     }
+
+    /**
+     * convertir toute les invitations manqué en string pour les envoyés au users ...
+     * @param invitations
+     * @return String, tous les invitations du user
+     */
     public String convertInvitationsToString(List<Invitation> invitations) {
-        // Iterate through the list of pending invitations and create a string with the sender's usernames
+
         StringBuilder invitationsString = new StringBuilder();
         for (Invitation invitation : invitations) {
             //System.out.println("invitation id " +invitation.getId());
             invitationsString.append(UserDao.getNameByID(invitation.getSender_id()) + ":"+invitation.getId()+",");
         }
-        // Remove the trailing comma
         if(invitationsString.length() > 0) {
             invitationsString.setLength(invitationsString.length() - 1);
         }

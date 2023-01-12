@@ -9,26 +9,23 @@ public class User {
     private int id;
     private String username;
     private String password;
-    private String numero;
     private String adresse;
     private List<User> friends = new ArrayList<>();
     private int port;
     private boolean isOnline;
 
     public User(){}
-    public User(String username, String password, String num, String adresse, int port) {
+    public User(String username, String password, String adresse, int port) {
         this.username = username;
         this.password = password;
-        this.numero = num;
         this.adresse = adresse;
         this.port = port;
         this.isOnline = false;
     }
-    public User(int id,String username, String password, String num, String adresse, int port) {
+    public User(int id,String username, String password, String adresse, int port) {
         this.id = id;
         this.username = username;
         this.password = password;
-        this.numero = num;
         this.adresse = adresse;
         this.port = port;
         this.isOnline = false;
@@ -58,15 +55,6 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    public String getNumero() {
-        return numero;
-    }
-
-    public void setNumero(String numero) {
-        this.numero = numero;
-    }
-
     public String getAdresse() {
         return adresse;
     }

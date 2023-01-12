@@ -12,13 +12,12 @@ public class UserDao {
     private static Connection connection = ConnectDB.getConnection();
 
     public static void addUser(User user) {
-        String sql = "INSERT INTO User (nom, password, num, adresse, port) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO User (nom, password, adresse, port) VALUES (?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, user.getUsername());
             statement.setString(2, user.getPassword());
-            statement.setString(3, user.getNumero());
-            statement.setString(4, user.getAdresse());
-            statement.setInt(5, user.getPort());
+            statement.setString(3, user.getAdresse());
+            statement.setInt(4, user.getPort());
             statement.executeUpdate();
         }catch (SQLException e){
             e.printStackTrace();
@@ -35,10 +34,9 @@ public class UserDao {
             if (resultSet.next()) {
                 String username = resultSet.getString("nom");
                 String password = resultSet.getString("password");
-                String numero = resultSet.getString("num");
                 String adresse = resultSet.getString("adresse");
                 int port = resultSet.getInt("port");
-                return new User(id,username,password, numero,adresse, port);
+                return new User(id,username,password,adresse, port);
             } else {
                 return null;
             }
@@ -67,10 +65,9 @@ public class UserDao {
             if(resultSet.next()){
                 String username = resultSet.getString("nom");
                 String password = resultSet.getString("password");
-                String numero = resultSet.getString("num");
                 String adresse = resultSet.getString("adresse");
                 int port = resultSet.getInt("port");
-                user = new User(username,password, numero, adresse, port);
+                user = new User(username,password, adresse, port);
             }
         }catch (SQLException e){e.printStackTrace();}
         return user;
@@ -92,8 +89,7 @@ public class UserDao {
     }
     public static List<User> getAllFriends(int id) {
         List<User> friends = new ArrayList<>();
-        //String sql = "SELECT f.friend_id FROM User u, FriendShip f WHERE u.id = f.user_id AND u.id = ?";
-        String sql = "SELECT u.* FROM User u, FriendShip f WHERE f.user_id = ? AND u.id = f.friend_id";
+        String sql = "SELECT u.* FROM User u, FriendShip f WHERE f.friend_id = u.id AND f.user_id = ?";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, id);
@@ -101,10 +97,9 @@ public class UserDao {
             while(resultSet.next()) {
                 String username = resultSet.getString("nom");
                 String password = resultSet.getString("password");
-                String numero = resultSet.getString("num");
                 String adresse = resultSet.getString("adresse");
                 int port = resultSet.getInt("port");
-                friends.add(new User(username,password, numero,adresse, port));
+                friends.add(new User(username,password,adresse, port));
             }
         }catch (SQLException e){
             e.printStackTrace();
@@ -119,10 +114,9 @@ public class UserDao {
             while(resultSet.next()) {
                 String username = resultSet.getString("nom");
                 String password = resultSet.getString("password");
-                String numero = resultSet.getString("num");
                 String adresse = resultSet.getString("adresse");
                 int port = resultSet.getInt("port");
-                users.add(new User(username,password, numero,adresse, port));
+                users.add(new User(username,password, adresse, port));
             }
         }catch (SQLException e) {
             e.printStackTrace();

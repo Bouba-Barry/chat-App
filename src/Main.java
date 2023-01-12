@@ -1,11 +1,8 @@
 import chatUdp.app.ChatClient;
-import chatUdp.dao.InvitationDao;
 import chatUdp.dao.UserDao;
-import chatUdp.entity.Invitation;
 import chatUdp.entity.User;
-import chatUdp.gui.ChatUI;
 
-import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 public class Main {
@@ -21,9 +18,17 @@ public class Main {
         for (User u: UserDao.getAllFriends(1)){
             System.out.println("friend_name: "+ u.getUsername());
         }
- */
-
+*/
+        LinkedHashSet<String> friendUsernames = new LinkedHashSet<>();
+        List<User> friends = UserDao.getAllFriends(1);
+        for (User f : friends) {
+            friendUsernames.add(f.getUsername());
+        }
+        for (User cl : UserDao.getAllUsers()) {
+            if (!friendUsernames.contains(cl.getUsername())) {
+                System.out.println(cl.getUsername());
+            }
+        }
 
     }
-
 }
