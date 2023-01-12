@@ -11,7 +11,7 @@
                         Mysql comme stockage pour la base de donnée.
 
 
-                                                  Comment Lancer L'application:  
+ Comment Lancer L'application:  
 
    Etape 1: Cloner le Projet dans Votre Ordinateur
    
@@ -43,7 +43,7 @@
   
           Vous devez faire un choix, entrez soit 1 pour faire le login 
           soit 2 pour la registration(enregistrement)  . ci-dessous image montrant le traitement
-          ![log](https://user-images.githubusercontent.com/96130733/212183185-553df0e1-1bc4-4355-8892-453a67011ddc.png)
+![log](https://user-images.githubusercontent.com/96130733/212186052-15878d0f-c349-483e-9b3e-8c2563616d58.png)
 
           
           
