@@ -1,4 +1,4 @@
-                                                           APPLICATION DE CHAT EN JAVA:
+                                                  APPLICATION DE CHAT EN JAVA:
 
           DESCRIPTION DU PROJET:
                         Cet application à été créer dans le but de comprendre le fonctionnement des sockets en java.
