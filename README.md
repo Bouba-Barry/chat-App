@@ -11,11 +11,13 @@
                         Mysql comme stockage pour la base de donnée.
 
 
-          Comment Lancer L'application:  
+                                                  Comment Lancer L'application:  
 
    Etape 1: Cloner le Projet dans Votre Ordinateur
+   
             Avoir l'environnement d'exécution de java , pour ma part j'ai déjà le JDK 17,
-            Cloner l'url du  projet url = ""  dans votre environnement de developpement,Avoir Mysql dans votre machine pour l'accès en base de donnée
+            Cloner l'url du  projet url = "https://github.com/barryStudent/chat-App.git" 
+            dans votre environnement de developpement,Avoir Mysql dans votre machine pour l'accès en base de donnée
                                
    Etape2: La librairie Mysql Connector
    
