@@ -39,20 +39,25 @@ Comment Lancer L'application:
       
   Etape1: fonctionnalité de Login et Register.
   
-          Vous devez faire un choix, entrez soit 1 pour faire le login soit 2 pour la registration(enregistrement). une fois fait vous entrez le username             et le password           
+          Vous devez faire un choix, entrez soit 1 pour faire le login 
+          soit 2 pour la registration(enregistrement)
+          ![log](https://user-images.githubusercontent.com/96130733/212183185-553df0e1-1bc4-4355-8892-453a67011ddc.png)
+
+          
+          
                 
   Etape2: Le Menu D'accueil
-  ![loginOrRegister](https://user-images.githubusercontent.com/96130733/212182605-548b3321-c452-4aba-a97c-ab53a9ac5b67.png)
-
-          Ce menu vous demande de faire un choix, entre:
+           Chaque partie du menu d'acceil traite un cas, il suffit de suivre les instructions, car ils 
+           sont aussi préciser en console pour aider au client de naviguer.
+    Ce menu vous demande de faire un choix, entre:
           
                        1: aller au chat           (vous entrez 1 au clavier pour cela )
                        2: Gerez les invitations   (vous entrez 2 )
                        3: Voir les amis           (vous entrez 3 )
                        4: deconnexion             (vous entrez 4 )
                        
-  Chaque partie du menu d'acceil traite un cas, il suffit de suivre les instructions, car ils sont aussi préciser en console pour aider
-  au client de naviguer.
+ ![chat](https://user-images.githubusercontent.com/96130733/212185070-c65c63ef-0766-4a45-bdb2-74737eae3144.png)
+
   
    POUR LA PARTIE 2: Gerez Invitations , Nous avons: 
    
@@ -61,6 +66,9 @@ Comment Lancer L'application:
                                                             vous devez entrez le nom du user a fin d'envoyé l'invitation)
                         3: Sortir                         (va vous rédiriger vers le menu d'accueil )
          
+   ![inviteMiss](https://user-images.githubusercontent.com/96130733/212184811-54e4073a-56c6-4780-8390-cc0c23b8352d.png)
+
+   
    
    POUR LA PARTIE 1: ALLER AU CHAT :
                           une fois la-bas vous pouvez envoyé et récevoir des messages de vous et vos amis et si vous entrez EXIT 
