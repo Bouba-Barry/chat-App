@@ -1,17 +1,17 @@
                                                   APPLICATION DE CHAT EN JAVA:
 
-          DESCRIPTION DU PROJET:
-                        Cet application à été créer dans le but de comprendre le fonctionnement des sockets en java.
-                        il permet à plusieurs utilisateur de communiquer entrez s'ils sont amis.
-                        
+DESCRIPTION DU PROJET:
+                          Cet application à été créer dans le but de comprendre le fonctionnement des sockets en java.
+                          il permet à plusieurs utilisateur de communiquer entrez s'ils sont amis.
+                      
+                      
+ Technologie Utilisé:  
+                    langage de programmation java , avec le protocole de Communication UDP et aussi les threads 
+                    environnement de developpement Intellij community version
+                    Mysql comme stockage pour la base de donnée.
 
-          Technologie Utilisé:  
-                        langage de programmation java , avec le protocole de Communication UDP et aussi les threads 
-                        environnement de developpement Intellij community version
-                        Mysql comme stockage pour la base de donnée.
 
-
- Comment Lancer L'application:  
+  Comment Lancer L'application:  
 
    Etape 1: Cloner le Projet dans Votre Ordinateur
    
@@ -21,13 +21,15 @@
                                
    Etape2: La librairie Mysql Connector
    
-           Mysql-Connector: vous pouvez telecharger ici "https://dev.mysql.com/downloads/connector/j/" la librarie en fonction de votre OS              
-           Ajouter La Librairie dans le Projet et ceci peut se faire de façon differente en fonction de votre environnement de travaille.
+       Mysql-Connector: vous pouvez telecharger ici "https://dev.mysql.com/downloads/connector/j/" la librarie en fonction de votre OS              
+       Ajouter La Librairie dans le Projet et ceci peut se faire de façon differente en fonction de votre environnement de travaille.
+       Après avoir ajouter la librairies, il y'a un un fichier ConnectDB dans le package src/chatUdp/dbConnexion où il faut modifier
+       le nom de user lié à mysql et le password.
                                       
    Etape3: Le Script Lié à la base de donnée 
    
-           Dans Le dossier ressource se trouve un fichier CHAT.sql , qui contient L'exportation des données de la base de donnée mysql.
-           faudrai exécuter ce script qui déjà quelques lignes à fin de faciliter la manupilation de l'application
+           Dans Le dossier ressource se trouve un fichier CHAT.sql , qui contient L'exportation des données
+           de la base de donnée mysql. faudrai exécuter ce script a fin d'avoir des enregistrements dans la base de donnée
                                
    Etape4: Lancement des applications:
    
@@ -37,9 +39,9 @@
                 Nb: pour lancer plusieurs clients avec intelliJ, editer la configuration du run et autoriser allow multiple instance.
                 
 
-                                  COMMENT UTILISER L'APPLICATION UNE FOIS LANCÉE:
+  COMMENT UTILISER L'APPLICATION UNE FOIS LANCÉE:
       
-  Etape1: fonctionnalité de Login et Register.
+  Etape 1: fonctionnalité de Login et Register.
   
           Vous devez faire un choix, entrez soit 1 pour faire le login 
           soit 2 pour la registration(enregistrement)  . ci-dessous image montrant le traitement
@@ -48,7 +50,7 @@
           
           
                 
-  Etape2: Le Menu D'accueil
+  Etape 2: Le Menu D'accueil
            Chaque partie du menu d'acceil traite un cas, il suffit de suivre les instructions, car ils 
            sont aussi préciser en console pour aider au client de naviguer.
     Ce menu vous demande de faire un choix, entre:
